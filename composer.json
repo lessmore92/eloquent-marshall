@@ -32,5 +32,12 @@
     "psr-4": {
       "Lessmore92\\EloquentMarshall\\": "src/"
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Lessmore92\\EloquentMarshall\\EloquentMarshallServiceProvider"
+      ]
+    }
   }
 }
