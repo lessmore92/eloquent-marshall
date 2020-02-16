@@ -1,0 +1,36 @@
+{
+  "name": "lessmore92/eloquent-marshall",
+  "description": "Search and sort functionality for laravel eloquent builder",
+  "keywords": [
+    "laravel",
+    "search",
+    "searchable",
+    "filter",
+    "eloquent",
+    "model",
+    "api",
+    "sort",
+    "sortable",
+    "marshall",
+    "builder",
+    "request"
+  ],
+  "type": "package",
+  "license": "mit",
+  "authors": [
+    {
+      "name": "Lessmore92",
+      "email": "bahramisoft@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "illuminate/database": "*",
+    "illuminate/support": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lessmore92\\EloquentMarshall\\": "src/"
+    }
+  }
+}
