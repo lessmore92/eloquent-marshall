@@ -25,7 +25,8 @@ class FilterFactory
         $this->resolveFilter($name, $model);
         if (class_exists($this->getNamespace()))
         {
-            $filter = app($this->getNamespace());
+            $filter = /** @scrutinizer ignore-call */
+                app($this->getNamespace());
             return $filter;
         }
         return false;

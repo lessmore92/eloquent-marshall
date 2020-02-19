@@ -25,7 +25,8 @@ class SortFactory
         $this->resolveSort($name, $model);
         if (class_exists($this->getNamespace()))
         {
-            $sort = app($this->getNamespace());
+            $sort = /** @scrutinizer ignore-call */
+                app($this->getNamespace());
             return $sort;
         }
         return false;

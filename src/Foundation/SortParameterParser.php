@@ -15,7 +15,8 @@ class SortParameterParser implements SortParameterParserInterface
     public function parse($sort_parameter): array
     {
         $_sorts         = [];
-        $_default_order = config('eloquent-marshall.default_sort_order', 'desc');
+        $_default_order = /** @scrutinizer ignore-call */
+            config('eloquent-marshall.default_sort_order', 'desc');
         if (!$this->sort_string_is_valid($sort_parameter))
         {
             return $_sorts;
@@ -27,6 +28,7 @@ class SortParameterParser implements SortParameterParserInterface
         }
         else
         {
+            $sorts   = array();
             $sorts[] = $sort_parameter;
         }
 

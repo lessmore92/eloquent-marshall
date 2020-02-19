@@ -17,7 +17,7 @@ class EloquentMarshallServiceProvider extends ServiceProvider
             SortParameterParser::class
         );
 
-        Builder::macro('searchable', function ($inputs = null) {
+        Builder::/** @scrutinizer ignore-call */ macro('searchable', function ($inputs = null) {
             $searchable = new Searchable();
             if ($inputs === null)
             {
@@ -31,14 +31,15 @@ class EloquentMarshallServiceProvider extends ServiceProvider
             return $query;
         });
 
-        Builder::macro('sortable', function ($sort_param_anme = null) {
+        Builder::/** @scrutinizer ignore-call */ macro('sortable', function ($sorts = null) {
             $sortable = new Sortable();
-            if ($sort_param_anme === null)
+            if ($sorts === null)
             {
-                $sorts = Request::get(config('eloquent_marshall.sort_param_name', 'sort'));
+                $sorts = Request::get(/** @scrutinizer ignore-call */ config('eloquent_marshall.sort_param_name', 'sort'));
             }
 
-            $parser = resolve(SortParameterParserInterface::class);
+            $parser = /** @scrutinizer ignore-call */
+                resolve(SortParameterParserInterface::class);
             $sorts  = $parser->parse($sorts);
 
             /**

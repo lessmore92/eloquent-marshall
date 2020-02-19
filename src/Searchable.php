@@ -45,7 +45,7 @@ class Searchable
     {
         foreach ($filters as $filter => $value)
         {
-            $_filter = $this->filterFactory->make($filter, $query->getModel());
+            $_filter = $this->filterFactory->make($filter, $query->/** @scrutinizer ignore-call */ getModel());
             if ($_filter instanceof Search)
             {
                 $query = $_filter->apply($query, $value);

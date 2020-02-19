@@ -45,7 +45,7 @@ class Sortable
     {
         foreach ($sorts as $sort => $value)
         {
-            $_sort = $this->sortFactory->make($sort, $query->getModel());
+            $_sort = $this->sortFactory->make($sort, $query->/** @scrutinizer ignore-call */ getModel());
             if ($_sort instanceof Sort)
             {
                 $query = $_sort->apply($query, $value);
