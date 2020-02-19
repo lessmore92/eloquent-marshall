@@ -9,6 +9,7 @@ namespace Illuminate\Database\Eloquent;
 
 /**
  * @method static \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model searchable()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model sortable()
  */
 class Builder
 {

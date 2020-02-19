@@ -11,10 +11,10 @@ namespace Lessmore92\EloquentMarshall\Foundation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class FilterFactory
+class SortFactory
 {
     /**
-     * Namespace of the model filter.
+     * Namespace of the model sort.
      *
      * @var string
      */
@@ -22,11 +22,11 @@ class FilterFactory
 
     public function make(string $name, Model $model)
     {
-        $this->resolveFilter($name, $model);
+        $this->resolveSort($name, $model);
         if (class_exists($this->getNamespace()))
         {
-            $filter = app($this->getNamespace());
-            return $filter;
+            $sort = app($this->getNamespace());
+            return $sort;
         }
         return false;
     }
@@ -45,29 +45,29 @@ class FilterFactory
     }
 
     /**
-     * Resolve namespace filters.
+     * Resolve namespace sorts.
      *
-     * @param string $filter
+     * @param string $sort
      * @param Model $model
      */
-    private function resolveFilter(string $filter, Model $model): void
+    private function resolveSort(string $sort, Model $model): void
     {
-        $namespace = $this->sanitizeNamespace($this->resolveNamespace($filter, $model));
+        $namespace = $this->sanitizeNamespace($this->resolveNamespace($sort, $model));
         $this->setNamespace($namespace);
     }
 
     /**
      * Resolve default or custom namespace.
      *
-     * @param string $filter
+     * @param string $sort
      * @param Model $model
      *
      * @return string
      */
-    private function resolveNamespace(string $filter, Model $model): string
+    private function resolveNamespace(string $sort, Model $model): string
     {
         $class_namespace = 'App\\EloquentMarshall\\';
-        return $class_namespace . class_basename($model) . '\\' . $this->resolveFilterName($filter);
+        return $class_namespace . class_basename($model) . '\\' . $this->resolveSortName($sort);
     }
 
     /**
@@ -83,12 +83,12 @@ class FilterFactory
     }
 
     /**
-     * @param string $filter
+     * @param string $sort
      *
      * @return string
      */
-    private function resolveFilterName(string $filter): string
+    private function resolveSortName(string $sort): string
     {
-        return Str::studly($filter) . 'Search';
+        return Str::studly($sort) . 'Sort';
     }
 }

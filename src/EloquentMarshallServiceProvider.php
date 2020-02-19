@@ -5,11 +5,18 @@ namespace Lessmore92\EloquentMarshall;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
+use Lessmore92\EloquentMarshall\Contracts\SortParameterParserInterface;
+use Lessmore92\EloquentMarshall\Foundation\SortParameterParser;
 
 class EloquentMarshallServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->app->bind(
+            SortParameterParserInterface::class,
+            SortParameterParser::class
+        );
+
         Builder::macro('searchable', function ($inputs = null) {
             $searchable = new Searchable();
             if ($inputs === null)
@@ -20,6 +27,24 @@ class EloquentMarshallServiceProvider extends ServiceProvider
              * @var Builder $this
              */
             $query = $searchable->for($this, $inputs);
+
+            return $query;
+        });
+
+        Builder::macro('sortable', function ($sort_param_anme = null) {
+            $sortable = new Sortable();
+            if ($sort_param_anme === null)
+            {
+                $sorts = Request::get(config('eloquent_marshall.sort_param_name', 'sort'));
+            }
+
+            $parser = resolve(SortParameterParserInterface::class);
+            $sorts  = $parser->parse($sorts);
+
+            /**
+             * @var Builder $this
+             */
+            $query = $sortable->for($this, $sorts);
 
             return $query;
         });

@@ -8,6 +8,7 @@
 namespace Lessmore92\EloquentMarshall;
 
 use Illuminate\Database\Eloquent\Builder;
+use Lessmore92\EloquentMarshall\Contracts\Search;
 use Lessmore92\EloquentMarshall\Foundation\FilterFactory;
 
 
@@ -44,9 +45,11 @@ class Searchable
     {
         foreach ($filters as $filter => $value)
         {
-            $query = $this->filterFactory->make($filter, $query->getModel())
-                                         ->apply($query, $value)
-            ;
+            $_filter = $this->filterFactory->make($filter, $query->getModel());
+            if ($_filter instanceof Search)
+            {
+                $query = $_filter->apply($query, $value);
+            }
         }
         return $query;
     }
