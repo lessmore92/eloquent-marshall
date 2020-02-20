@@ -67,7 +67,8 @@ class EloquentMarshallServiceProvider extends ServiceProvider
             /**
              * @var ParameterStore $store
              */
-            $store = resolve('EloquentMarshall\Parameters');
+            $store = /** @scrutinizer ignore-call */
+                resolve('EloquentMarshall\Parameters');
             return $store->get();
         });
     }
