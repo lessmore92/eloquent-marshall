@@ -10,6 +10,7 @@ namespace Lessmore92\EloquentMarshall;
 use Illuminate\Database\Eloquent\Builder;
 use Lessmore92\EloquentMarshall\Contracts\Search;
 use Lessmore92\EloquentMarshall\Foundation\FilterFactory;
+use Lessmore92\EloquentMarshall\Foundation\ParameterStore;
 
 
 class Searchable
@@ -19,9 +20,16 @@ class Searchable
      */
     protected $filterFactory;
 
+    /**
+     * @var ParameterStore
+     */
+    protected $parameter_sotre;
+
     public function __construct()
     {
-        $this->filterFactory = new FilterFactory();
+        $this->filterFactory   = new FilterFactory();
+        $this->parameter_sotre = /** @scrutinizer ignore-call */
+            resolve('EloquentMarshall\Parameters');
     }
 
     /**
@@ -49,6 +57,7 @@ class Searchable
             if ($_filter instanceof Search)
             {
                 $query = $_filter->apply($query, $value);
+                $this->parameter_sotre->add($filter, $value);
             }
         }
         return $query;

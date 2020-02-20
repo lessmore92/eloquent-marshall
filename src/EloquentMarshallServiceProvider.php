@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use Lessmore92\EloquentMarshall\Contracts\SortParameterParserInterface;
+use Lessmore92\EloquentMarshall\Foundation\ParameterStore;
 use Lessmore92\EloquentMarshall\Foundation\SortParameterParser;
 
 class EloquentMarshallServiceProvider extends ServiceProvider
@@ -16,6 +17,10 @@ class EloquentMarshallServiceProvider extends ServiceProvider
             SortParameterParserInterface::class,
             SortParameterParser::class
         );
+
+        $this->app->singleton('EloquentMarshall\Parameters', function () {
+            return new ParameterStore();
+        });
 
         Builder::/** @scrutinizer ignore-call */ macro('searchable', function ($inputs = null) {
             $searchable = new Searchable();
@@ -31,12 +36,20 @@ class EloquentMarshallServiceProvider extends ServiceProvider
             return $query;
         });
 
-        Builder::/** @scrutinizer ignore-call */ macro('sortable', function ($sorts = null) {
+        Builder::/** @scrutinizer ignore-call */ macro('sortable', function ($sort_param_name = null) {
             $sortable = new Sortable();
-            if ($sorts === null)
+            if ($sort_param_name === null)
             {
-                $sorts = Request::get(/** @scrutinizer ignore-call */ config('eloquent_marshall.sort_param_name', 'sort'));
+                $sort_param_name = /** @scrutinizer ignore-call */
+                    config('eloquent_marshall.sort_param_name', 'sort');
             }
+            $sorts = Request::get($sort_param_name);
+            /**
+             * @var ParameterStore $store
+             */
+            $store = /** @scrutinizer ignore-call */
+                resolve('EloquentMarshall\Parameters');
+            $store->add($sort_param_name, $sorts);
 
             $parser = /** @scrutinizer ignore-call */
                 resolve(SortParameterParserInterface::class);
@@ -48,6 +61,14 @@ class EloquentMarshallServiceProvider extends ServiceProvider
             $query = $sortable->for($this, $sorts);
 
             return $query;
+        });
+
+        Builder::/** @scrutinizer ignore-call */ macro('getAppendableParameters', function () {
+            /**
+             * @var ParameterStore $store
+             */
+            $store = resolve('EloquentMarshall\Parameters');
+            return $store->get();
         });
     }
 }

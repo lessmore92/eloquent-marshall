@@ -10,6 +10,7 @@ namespace Illuminate\Database\Eloquent;
 /**
  * @method static \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model searchable()
  * @method static \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model sortable()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model getAppendableParameters()
  */
 class Builder
 {
