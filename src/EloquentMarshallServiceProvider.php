@@ -13,6 +13,8 @@ class EloquentMarshallServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__ . '/config/config.php', 'eloquent_marshall');
+
         $this->app->bind(
             SortParameterParserInterface::class,
             SortParameterParser::class
@@ -20,6 +22,10 @@ class EloquentMarshallServiceProvider extends ServiceProvider
 
         $this->app->singleton('EloquentMarshall\Parameters', function () {
             return new ParameterStore();
+        });
+
+        $this->app->bind('eloquent-marshall', function ($app) {
+            return new EloquentMarshall();
         });
 
         Builder::/** @scrutinizer ignore-call */ macro('searchable', function ($inputs = null) {
@@ -71,5 +77,16 @@ class EloquentMarshallServiceProvider extends ServiceProvider
                 resolve('EloquentMarshall\Parameters');
             return $store->get();
         });
+    }
+
+    public function boot()
+    {
+        if ($this->app->runningInConsole())
+        {
+            $this->publishes([
+                __DIR__ . '/config/config.php' => config_path('eloquent_marshall.php'),
+            ], 'config');
+
+        }
     }
 }

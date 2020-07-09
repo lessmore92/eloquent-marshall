@@ -16,15 +16,16 @@ class SortParameterParser implements SortParameterParserInterface
     {
         $_sorts         = [];
         $_default_order = /** @scrutinizer ignore-call */
-            config('eloquent-marshall.default_sort_order', 'desc');
-        if (!$this->sort_string_is_valid($sort_parameter))
+            config('eloquent_marshall.default_sort_order', 'desc');
+
+        if (!$this->sort_is_parsable($sort_parameter))
         {
             return $_sorts;
         }
 
-        if ($this->sort_string_is_explodable($sort_parameter))
+        if ($this->sort_is_array($sort_parameter))
         {
-            $sorts = explode(',', $sort_parameter);
+            $sorts = $sort_parameter;
         }
         else
         {
@@ -53,23 +54,18 @@ class SortParameterParser implements SortParameterParserInterface
      * @param string $sort
      * @return bool
      */
-    private function sort_string_is_valid($sort)
+    private function sort_is_parsable($sort)
     {
-        if (strlen(trim($sort)) <= 0)
-        {
-            return false;
-        }
-
-        return true;
+        return is_array($sort) || (is_string($sort) && strlen(trim($sort))) > 0;
     }
 
     /**
      * @param string $sort
      * @return bool
      */
-    private function sort_string_is_explodable($sort)
+    private function sort_is_array($sort)
     {
-        return strpos($sort, ',') !== false;
+        return is_array($sort);
     }
 
     /**

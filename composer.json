@@ -37,7 +37,10 @@
     "laravel": {
       "providers": [
         "Lessmore92\\EloquentMarshall\\EloquentMarshallServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "EloquentMarshall": "Lessmore92\\EloquentMarshall\\Facades\\EloquentMarshall"
+      }
     }
   }
 }
